@@ -1,0 +1,39 @@
+name: Publish to npm
+
+# Run this manually from the GitHub Actions tab.
+# For the first publish of a new package, create the repository secret NPM_TOKEN.
+# After the package exists, configure npm trusted publishing for
+# quarterback/plain-as-day and this file (publish.yml), then remove NPM_TOKEN.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v6
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version: '24'
+          registry-url: 'https://registry.npmjs.org'
+          package-manager-cache: false
+
+      - name: Run tests
+        run: npm test
+
+      - name: Check package contents
+        run: npm pack --dry-run
+
+      - name: Publish to npm
+        run: npm publish --access public --provenance
+        env:
+          # Needed to create a brand-new npm package.
+          # Leave unset after enabling npm trusted publishing (OIDC).
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
