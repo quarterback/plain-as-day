@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "plain-language-default": {
+      "command": "npx",
+      "args": ["-y", "plain-language-default@latest", "mcp"]
+    }
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "name": "plain-language-default",
+  "version": "0.1.0",
+  "description": "Federal plain-language writing rules for AI agents: SKILL.md, project installer, and MCP server",
+  "type": "module",
+  "license": "CC0-1.0",
+  "engines": {
+    "node": ">=20"
+  },
+  "bin": {
+    "plain-language-default": "./src/cli.mjs",
+    "plain-language-mcp": "./src/mcp.mjs"
+  },
+  "exports": {
+    ".": "./src/core.mjs",
+    "./skill": "./src/core.mjs",
+    "./mcp": "./src/mcp.mjs"
+  },
+  "files": [
+    "src/",
+    "SKILL.md",
+    "CUSTOM_INSTRUCTIONS.md",
+    "examples/",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "test": "node --test",
+    "pack:check": "npm pack --dry-run",
+    "mcp": "node src/mcp.mjs",
+    "check": "node src/cli.mjs check"
+  },
+  "keywords": [
+    "plain-language",
+    "plainlanguage.gov",
+    "federal-plain-language",
+    "mcp",
+    "model-context-protocol",
+    "agent-skills",
+    "content-design",
+    "writing"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/quarterback/plain-as-day.git"
+  },
+  "homepage": "https://github.com/quarterback/plain-as-day#readme",
+  "bugs": {
+    "url": "https://github.com/quarterback/plain-as-day/issues"
+  }
+}
