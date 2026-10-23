@@ -13,6 +13,39 @@ This package includes:
 
 The package has **no runtime dependencies**, needs **Node.js 20 or later**, and does **not send your text to an external service**. It is an independent project, not an official U.S. government tool.
 
+## Install from the agent skill directory
+
+You can install the skill from GitHub through [skills.sh](https://skills.sh/docs/cli) without publishing an npm package:
+
+```sh
+npx skills add quarterback/plain-as-day
+```
+
+Use `npx skills add quarterback/plain-as-day -g` for a global installation. Skills appear on the skills.sh leaderboard after people install them through the skills CLI; you do not need a separate listing submission.
+
+Agent skills may be loaded only when an agent finds them relevant. For writing rules on every response, install the persistent project instructions described below or add the Custom Instructions to your assistant.
+
+## Publish to the official MCP Registry
+
+npm distributes the MCP server. The [official MCP Registry](https://registry.modelcontextprotocol.io) separately lists it so MCP clients can discover it.
+
+This repository includes a `server.json` manifest and npm `mcpName` metadata. Both identify the server as `io.github.quarterback/plain-as-day`. The MCP server runs locally through `npx` with the `mcp` command over standard input and output.
+
+1. **Publish the npm package version containing the `mcpName` metadata.** If `0.1.0` was already published without `mcpName`, increase the version in `package.json`, and update both `version` fields in `server.json`. npm does not allow replacing a published version.
+2. Open [Publish to MCP Registry](https://github.com/quarterback/plain-as-day/actions/workflows/publish-mcp.yml) and select **Run workflow** on `main`. The workflow checks the npm release, validates the manifest, and publishes it using GitHub Actions identity. No additional MCP Registry secret is needed.
+3. Confirm your listing in the [MCP Registry](https://registry.modelcontextprotocol.io).
+
+Alternatively, from a local checkout *after* publishing the npm package:
+
+```sh
+brew install mcp-publisher
+mcp-publisher validate server.json
+mcp-publisher login github
+mcp-publisher publish server.json
+```
+
+A `server.json` file in GitHub does not, by itself, register an MCP server. Registry publication is a separate authenticated step. An MCP connection also does not force writing rules on every model response.
+
 ## Install the writing rules in a project
 
 Run this from your project directory once the npm package is published:
