@@ -47,5 +47,6 @@
   "homepage": "https://github.com/quarterback/plain-as-day#readme",
   "bugs": {
     "url": "https://github.com/quarterback/plain-as-day/issues"
-  }
+  },
+  "mcpName": "io.github.quarterback/plain-as-day"
 }
