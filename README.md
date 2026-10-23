@@ -112,21 +112,42 @@ node src/mcp.mjs  # waits for an MCP client on stdin
 
 No `npm install` step is required to run or test this source package.
 
-## Publish to npm
+## Publish from GitHub (no local checkout)
 
-If the name `plain-language-default` is available and you have an npm account:
+This repository has a manual [Publish to npm workflow](https://github.com/quarterback/plain-as-day/actions/workflows/publish.yml). You can release from your browser.
+
+**First release:** npm currently requires a publishing token to create a brand-new package. Trusted publishing (OIDC) can replace it after the first version exists.
+
+1. Sign in to [npmjs.com](https://www.npmjs.com/) and open **Profile → Access Tokens → Generate New Token**.
+2. Choose **Read and write (publish and stage)** for packages, select **All Packages** for the initial release, and turn on **Bypass two-factor authentication**. Use a short expiry because you will replace this token with trusted publishing. Copy the token. Do not commit it or put it in a GitHub issue.
+3. Open [GitHub repository Actions secrets](https://github.com/quarterback/plain-as-day/settings/secrets/actions), click **New repository secret**, name it `NPM_TOKEN`, and paste the value.
+4. Open [Publish to npm](https://github.com/quarterback/plain-as-day/actions/workflows/publish.yml), click **Run workflow**, select `main`, and start the run.
+5. Check [plain-language-default on npm](https://www.npmjs.com/package/plain-language-default) or inspect the workflow logs. The package must be owned by your npm account (or the unclaimed name must be available).
+
+The workflow runs tests, previews the release contents, and publishes using the package name in `package.json`, currently `plain-language-default@0.1.0`. Running it again with the same version will not publish a second copy.
+
+**Future releases without a saved npm token:**
+
+1. Once the package is published, open its npm package **Settings → Trusted publishing** and add a GitHub Actions trusted publisher:
+   - GitHub user: `quarterback`
+   - Repository: `plain-as-day`
+   - Workflow filename: `publish.yml`
+   - Allow direct `npm publish`.
+2. Remove the `NPM_TOKEN` GitHub secret and revoke that token from your npm account.
+3. For each new release, increase the version in `package.json`, then use the same **Run workflow** button.
+
+New trusted-publisher configurations must be validated by a successful publication within two days. This workflow uses GitHub-hosted runners, Node.js 24 and the required OIDC permission.
+
+See [npm's trusted publishing documentation](https://docs.npmjs.com/trusted-publishers/) and [access-token instructions](https://docs.npmjs.com/creating-and-viewing-access-tokens/).
+
+### Alternative: publish from a local checkout
 
 ```sh
 npm login
-npm view plain-language-default version
 npm test
 npm pack --dry-run
 npm publish --access public
 ```
-
-If `npm view` reports that the name is already taken, choose an unused package name in `package.json`, update the examples, and publish under that name. A `404` from `npm view` normally means the package does not exist, but network or permission errors mean you should investigate before publishing.
-
-Publishing may require two-factor authentication or a suitable npm token. This package does not publish itself, create accounts, or bypass npm's authentication.
 
 ## Source guidance and attribution
 
